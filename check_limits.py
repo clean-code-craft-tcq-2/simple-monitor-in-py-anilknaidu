@@ -1,18 +1,31 @@
 
 def battery_is_ok(temperature, soc, charge_rate):
-  if temperature < 0 or temperature > 45:
-    print('Temperature is out of range!')
-    return False
-  elif soc < 20 or soc > 80:
-    print('State of Charge is out of range!')
-    return False
-  elif charge_rate > 0.8:
-    print('Charge rate is out of range!')
-    return False
+  if temperature in range(0,46):
+    if soc in range(20,81):
+      if charge_rate <= 0.8 and charge_rate>0:
+        return True
+    else:
+      check_battery_soc_status(soc)
+  return False
 
-  return True
+def check_battery_soc_status(soc):
+  if(soc in range(0,20) or soc >80):
+    print("Abnormal SoC detected")
+    return()
+
 
 
 if __name__ == '__main__':
   assert(battery_is_ok(25, 70, 0.7) is True)
   assert(battery_is_ok(50, 85, 0) is False)
+  #BoundaryConditionTesting
+  assert(battery_is_ok(0, 70, 0.7) is True)
+  assert(battery_is_ok(46, 70, 0.7)is False)
+  assert(battery_is_ok(-1, 70, 0.7) is False)
+  assert(battery_is_ok(25, 20, 0.7) is True)
+  assert(battery_is_ok(25, -1, 0.7) is False)
+  assert(battery_is_ok(25, 81, 0.7) is False)
+  assert(battery_is_ok(25, 70, -1) is False)
+  assert(battery_is_ok(25, -1, 0.81) is False)
+  assert(battery_is_ok(25, 70, 0.0) is False)
+
