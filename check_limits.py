@@ -46,4 +46,4 @@ if __name__ == '__main__':
   assert(battery_is_ok(25, 70, -1) is False)
   assert(battery_is_ok(25, -1, 0.81) is False)
   assert(battery_is_ok(25, 70, 0.0) is False)
-  assert(battery_management_system(25,70,0) is "Breach")
+  assert(battery_management_system(25,70,0) == "Breach")
