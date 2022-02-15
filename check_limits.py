@@ -63,15 +63,23 @@ def report_signal_soc_state(soc):
       print("SoC Level: ",soc,": ",soc_state)
 
 def convert_to_celcius(temperature):
-  if('f' in temperature.lower() ):
-    return((int(temperature.lower().split('f')[0])-32.0)*(5.0/9.0))
-  elif('k' in temperature.lower()):
-    return(int(temperature.lower().split('k')[0])-273.0)
-  elif('c' in temperature.lower()):
-    return(int(temperature.lower().split('c')[0]))
+  temperature,itsUnit = extract_temperature_unit(temperature)
+  print(temperature,itsUnit)
+  return(temperatureConverterDcn[itsUnit.lower()](temperature))
+
+def extract_temperature_unit(temperature):
+  return(float(temperature[:-1]),temperature[-1])
 
 def check_limits_for_warning(valueToBeChecked,lower_limit,upper_limit):
   return(int(valueToBeChecked*100) in range(int(lower_limit*100),int(upper_limit*100+1)))
+
+def convert_fahrenheit_to_celcius(temperature):
+  return((temperature-32.0)*(5.0/9.0))
+
+def convert_kelvin_to_celcius(temperature):
+  return(temperature-273.0)
+
+temperatureConverterDcn = {"k":convert_kelvin_to_celcius,"f":convert_fahrenheit_to_celcius,"c":lambda temperature:temperature}
 
 if __name__ == '__main__':
   assert(battery_is_ok('25c', 70, 0.7) is True)
@@ -86,4 +94,4 @@ if __name__ == '__main__':
   assert(battery_is_ok('290K', 21, -1) is False)
   assert(battery_is_ok('25c', -1, 0.81) is False)
   assert(battery_is_ok('14c', 70, 0.0) is False)
-  assert(battery_management_system('25',70,0) == "Breach")
+  assert(battery_management_system('25c',70,0) == "Breach")
