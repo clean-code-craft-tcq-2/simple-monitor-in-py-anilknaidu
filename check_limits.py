@@ -39,21 +39,21 @@ def battery_management_system(temperature, soc, charge_rate):
     return("Breach")
 
 def battery_soc_warning(soc):
-  if(soc>=(80-0.05*80) and (soc<=80)):
+  if(check_limits_for_warning(soc,76,80)):
     print("Warning: Approaching charge-peak")
-  elif(soc<=(0.05*20+20) and (soc>=20)):
+  elif(check_limits_for_warning(soc,20,21)):
     print("Warning: Approaching discharge")
 
 def battery_temperature_warning(temperature):
-  if(temperature>=(46-0.05*46) and (temperature<=46)):
+  if(check_limits_for_warning(temperature,43,47)):
     print("Warning: Approaching temperature-peak")
-  elif(temperature<=(0.05*46) and (temperature>0)):
+  elif(check_limits_for_warning(temperature,0,3)):
     print("Warning: Approaching low temperature")
 
 def battery_charge_warning(charge):
-  if(charge>=(0.8-0.05*0.8) and (charge<=0.8)):
+  if(check_limits_for_warning(charge,0.76,0.80)):
     print("Warning: Approaching High Charging peak")
-  elif(charge<=(0.05*0.8) and (charge>0)):
+  elif(check_limits_for_warning(charge,0,0.04)):
     print("Warning: Approaching Low charging")
 
 
@@ -70,6 +70,8 @@ def convert_to_celcius(temperature):
   elif('c' in temperature.lower()):
     return(int(temperature.lower().split('c')[0]))
 
+def check_limits_for_warning(valueToBeChecked,lower_limit,upper_limit):
+  return(int(valueToBeChecked*100) in range(int(lower_limit*100),int(upper_limit*100+1)))
 
 if __name__ == '__main__':
   assert(battery_is_ok('25c', 70, 0.7) is True)
