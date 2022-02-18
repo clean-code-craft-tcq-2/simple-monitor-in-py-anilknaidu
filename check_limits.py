@@ -18,7 +18,7 @@ def check_battery_temp_range(temperature):
 
 def check_battery_soc_range(soc):
   report_signal_soc_state(soc)
-  if soc in range(20,81):
+  if soc in range(signal_soc_status["LOW_SOC_BREACH"][1]-1,signal_soc_status["HIGH_SOC_BREACH"][0]):
     battery_soc_warning(soc)
     return(True)
   else: 
@@ -39,9 +39,9 @@ def battery_management_system(temperature, soc, charge_rate):
     return("Breach")
 
 def battery_soc_warning(soc):
-  if(check_limits_for_warning(soc,76,80)):
+  if(check_limits_for_warning(soc,signal_soc_status["HIGH_SOC_WARNING"][0],signal_soc_status["HIGH_SOC_BREACH"][0])):
     print("Warning: Approaching charge-peak")
-  elif(check_limits_for_warning(soc,20,21)):
+  elif(check_limits_for_warning(soc,signal_soc_status["LOW_SOC_BREACH"][0]-1,signal_soc_status["LOW_SOC_WARNING"][0]+1)):
     print("Warning: Approaching discharge")
 
 def battery_temperature_warning(temperature):
